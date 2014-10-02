@@ -1,0 +1,9 @@
+Temporary files
+*.swp
+*.swo
+*.swn
+*.DS_Store
+*~
+
+# PyCharm IDE settings
+.idea/
