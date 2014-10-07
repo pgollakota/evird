@@ -1,9 +1,6 @@
 /** @jsx React.DOM */
 
 var GoogleApiAuthForm = React.createClass({
-    getInitialState: function() {
-        return {apiKey: null, clientId: null};
-    },
     render: function () {
         return (
             <form role="form" onSubmit={this.handleSubmit}>
@@ -32,16 +29,23 @@ var GoogleApiAuthForm = React.createClass({
         var scopes = ['https://www.googleapis.com/auth/drive.readonly'];
         var clientId = this.refs.clientId.getDOMNode().value.trim();
 
-        function checkAuth() {
+        (function checkAuth() {
             gapi.auth.authorize({client_id: clientId, scope: scopes},
                 handleAuthResult);
-        }
-        checkAuth()
+        })();
 
         function handleAuthResult(result) {
-            console.log(result);
+            // FIXME: Handle fail result
+            gapi.client.load('drive', 'v2').then(function() {console.log('loaded')});
+            React.renderComponent(<FilesList />, document.getElementById('app'));
         }
 
+    }
+});
+
+var FilesList = React.createClass({
+    render: function () {
+        return <div> Files here! </div>
     }
 });
 
