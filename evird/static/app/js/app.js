@@ -41,11 +41,32 @@ var GoogleApiAuthForm = React.createClass({
 });
 
 var EvirdApp = React.createClass({
-    componentDidMount: function() {
-        gapi.client.drive.files.list().then(function(data) {console.log(data);})
+
+    getInitialState: function() {
+        return {filesList: {}}
     },
+
+    componentDidMount: function() {
+        gapi.client.drive.files.list().then(
+            function (data) { console.log(data); this.setState({filesList: data}); }.bind(this));
+    },
+
     render: function () {
-        return <div> Files here! </div>
+        return <FilesList filesList={this.state.filesList}/>
+    }
+
+});
+
+var FilesList = React.createClass({
+    render: function() {
+        var rows = [];
+        if (!_.isUndefined(this.props.filesList.result)) {
+            rows = _.map(this.props.filesList.result.items,
+                function(x) { return <tr> <td> {x.title} </td> </tr> });
+        }
+        return (
+            <table className="table table-striped"> <tbody> {rows} </tbody> </table>
+        );
     }
 });
 
