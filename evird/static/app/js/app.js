@@ -47,7 +47,7 @@ var EvirdApp = React.createClass({
     },
 
     componentDidMount: function() {
-        gapi.client.drive.files.list().then(
+        gapi.client.request({path: '/drive/v2/files', params: {q: "'root' in parents"}}).then(
             function (data) { console.log(data); this.setState({filesList: data}); }.bind(this));
     },
 
@@ -61,8 +61,24 @@ var FilesList = React.createClass({
     render: function() {
         var rows = [];
         if (!_.isUndefined(this.props.filesList.result)) {
-            rows = _.map(this.props.filesList.result.items,
-                function(x) { return <tr> <td> {x.title} </td> </tr> });
+            rows = _.map(
+                _.sortBy(
+                    _.filter(this.props.filesList.result.items,
+                        function(x) { return !x.parents.length? true: _.some(x.parents, 'isRoot')
+                    }),
+                    function(x) {
+                        return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]
+                    }
+                ),
+                function(x) {
+                    return (
+                        <tr>
+                            <td> {x.title} </td>
+                            <td> {x.modifiedDate} </td>
+                            <td> {x.mimeType} </td>
+                        </tr>
+                    );
+                });
         }
         return (
             <table className="table table-striped"> <tbody> {rows} </tbody> </table>
