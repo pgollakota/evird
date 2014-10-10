@@ -47,7 +47,8 @@ var EvirdApp = React.createClass({
     },
 
     componentDidMount: function() {
-        gapi.client.request({path: '/drive/v2/files', params: {q: "'root' in parents"}}).then(
+        gapi.client.request(
+            {path: '/drive/v2/files', params: {q: "'root' in parents and trashed=false"}}).then(
             function (data) { console.log(data); this.setState({filesList: data}); }.bind(this));
     },
 
@@ -63,9 +64,7 @@ var FilesList = React.createClass({
         if (!_.isUndefined(this.props.filesList.result)) {
             rows = _.map(
                 _.sortBy(
-                    _.filter(this.props.filesList.result.items,
-                        function(x) { return !x.parents.length? true: _.some(x.parents, 'isRoot')
-                    }),
+                    this.props.filesList.result.items,
                     function(x) {
                         return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]
                     }
