@@ -53,11 +53,43 @@ var EvirdApp = React.createClass({
     },
 
     render: function () {
-        return <FilesList filesList={this.state.filesList}/>
+        return (
+            <div class="container">
+                <div class="row">
+                    <SideBar />
+                    <FilesList filesList={this.state.filesList}/>
+                </div>
+            </div>
+        );
     }
 
 });
 
+var SideBar = React.createClass({
+    render: function() {
+        return (
+            <div className="col-md-2 sidebar">
+                <ul className="nav nav-sidebar">
+                    <li className="active">
+                        <a href="#">My Drive</a>
+                    </li>
+                    <li>
+                        <a href="#">Incoming</a>
+                    </li>
+                    <li>
+                        <a href="#">Recent</a>
+                    </li>
+                    <li>
+                        <a href="#">Starred</a>
+                    </li>
+                    <li>
+                        <a href="#">Trash</a>
+                    </li>
+                </ul>
+            </div>
+        );
+    }
+});
 var FilesList = React.createClass({
     render: function() {
         var rows = [];
@@ -72,15 +104,19 @@ var FilesList = React.createClass({
                 function(x) {
                     return (
                         <tr>
-                            <td> {x.title} </td>
+                            <td> <img src={x.iconLink}></img> {x.title} </td>
                             <td> {x.modifiedDate} </td>
-                            <td> {x.mimeType} </td>
                         </tr>
                     );
                 });
         }
         return (
-            <table className="table table-striped"> <tbody> {rows} </tbody> </table>
+            <div className="col-md-10">
+                <table className="table table-striped">
+                    <thead> <td> Name </td> <td> Last Modified </td> </thead>
+                    <tbody> {rows} </tbody>
+                </table>
+            </div>
         );
     }
 });
