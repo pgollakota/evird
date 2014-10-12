@@ -49,14 +49,20 @@ var EvirdApp = React.createClass({
     componentDidMount: function() {
         gapi.client.request(
             {path: '/drive/v2/files', params: {q: "'root' in parents and trashed=false"}}).then(
-            function (data) { console.log(data); this.setState({filesList: data}); }.bind(this));
+            function (data) { this.setState({filesList: data}); }.bind(this));
+    },
+
+    handleClickTrashFolder: function() {
+        gapi.client.request(
+            {path: '/drive/v2/files', params: {q: "trashed=true"}}).then(
+            function (data) { this.setState({filesList: data}); }.bind(this));
     },
 
     render: function () {
         return (
             <div class="container">
                 <div class="row">
-                    <SideBar />
+                    <SideBar handleClickTrashFolder={this.handleClickTrashFolder} />
                     <FilesList filesList={this.state.filesList}/>
                 </div>
             </div>
@@ -82,7 +88,7 @@ var SideBar = React.createClass({
                     <li>
                         <a href="#">Starred</a>
                     </li>
-                    <li>
+                    <li onClick={this.props.handleClickTrashFolder}>
                         <a href="#">Trash</a>
                     </li>
                 </ul>
