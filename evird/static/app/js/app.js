@@ -40,6 +40,26 @@ var GoogleApiAuthForm = React.createClass({
     }
 });
 
+
+function retrieveAllFiles(initialRequest, callback) {
+    var retrievePageOfFiles = function (request, result) {
+        request.execute(function (resp) {
+            result = result.concat(resp.items);
+            var nextPageToken = resp.nextPageToken;
+            if (nextPageToken) {
+                request = gapi.client.drive.files.list({
+                    'pageToken': nextPageToken
+                });
+                retrievePageOfFiles(request, result);
+            } else {
+                callback(result);
+            }
+        });
+    };
+    retrievePageOfFiles(initialRequest, []);
+}
+
+
 var EvirdApp = React.createClass({
 
     getInitialState: function() {
@@ -47,21 +67,21 @@ var EvirdApp = React.createClass({
     },
 
     componentDidMount: function() {
-        gapi.client.request(
-            {path: '/drive/v2/files', params: {q: "'root' in parents and trashed=false"}}).then(
+        retrieveAllFiles(gapi.client.request(
+            {path: '/drive/v2/files', params: {q: "'root' in parents and trashed=false"}}),
             function (data) { this.setState({filesList: data}); }.bind(this));
     },
 
     handleClickTrashFolder: function() {
-        gapi.client.request(
-            {path: '/drive/v2/files', params: {q: "trashed=true"}}).then(
+        retrieveAllFiles(gapi.client.request(
+            {path: '/drive/v2/files', params: {q: "trashed=true"}}),
             function (data) { this.setState({filesList: data}); }.bind(this));
     },
 
     render: function () {
         return (
-            <div class="container">
-                <div class="row">
+            <div className="container">
+                <div className="row">
                     <SideBar handleClickTrashFolder={this.handleClickTrashFolder} />
                     <FilesList filesList={this.state.filesList}/>
                 </div>
@@ -70,6 +90,7 @@ var EvirdApp = React.createClass({
     }
 
 });
+
 
 var SideBar = React.createClass({
     render: function() {
@@ -96,13 +117,15 @@ var SideBar = React.createClass({
         );
     }
 });
+
+
 var FilesList = React.createClass({
     render: function() {
         var rows = [];
-        if (!_.isUndefined(this.props.filesList.result)) {
+        if (!_.isUndefined(this.props.filesList)) {
             rows = _.map(
                 _.sortBy(
-                    this.props.filesList.result.items,
+                    this.props.filesList,
                     function(x) {
                         return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]
                     }
@@ -126,5 +149,6 @@ var FilesList = React.createClass({
         );
     }
 });
+
 
 React.renderComponent(<GoogleApiAuthForm />, document.getElementById('app'));
