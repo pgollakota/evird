@@ -72,6 +72,12 @@ var EvirdApp = React.createClass({
             function (data) { this.setState({filesList: data}); }.bind(this));
     },
 
+    updateFilesList: function(q) {
+        retrieveAllFiles(gapi.client.request(
+            {path: '/drive/v2/files', params: {q: q}}),
+            function (data) { this.setState({filesList: data}); }.bind(this));
+    },
+
     handleClickTrashFolder: function() {
         retrieveAllFiles(gapi.client.request(
             {path: '/drive/v2/files', params: {q: "trashed=true"}}),
@@ -83,7 +89,9 @@ var EvirdApp = React.createClass({
             <div className="container">
                 <div className="row">
                     <SideBar handleClickTrashFolder={this.handleClickTrashFolder} />
-                    <FilesList filesList={this.state.filesList}/>
+                    <FilesList
+                        filesList={this.state.filesList}
+                        updateFilesList={this.updateFilesList} />
                 </div>
             </div>
         );
@@ -120,6 +128,12 @@ var SideBar = React.createClass({
 
 
 var FilesList = React.createClass({
+    handleDoubleClickRow: function(ev) {
+        ev.preventDefault();
+        var fileId = ev.target.getAttribute('data-file-id');
+        this.props.updateFilesList("'" + fileId + "' in parents and trashed=false");
+    },
+
     render: function() {
         var rows = [];
         if (!_.isUndefined(this.props.filesList)) {
@@ -127,17 +141,25 @@ var FilesList = React.createClass({
                 _.sortBy(
                     this.props.filesList,
                     function(x) {
-                        return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]
-                    }
-                ),
+                        return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]}),
                 function(x) {
-                    return (
-                        <tr>
-                            <td> <img src={x.iconLink}></img> {x.title} </td>
-                            <td> {x.modifiedDate} </td>
-                        </tr>
-                    );
-                });
+                    if (x.mimeType === 'application/vnd.google-apps.folder') {
+                        return (
+                            <tr key={x.id} data-file-id={x.id} onDoubleClick={this.handleDoubleClickRow}>
+                                <td data-file-id={x.id}> <img src={x.iconLink}></img> {x.title} </td>
+                                <td data-file-id={x.id}> {x.modifiedDate} </td>
+                            </tr>
+                        )
+                    } else {
+                        return (
+                            <tr key={x.id} data-file-id={x.id}>
+                                <td data-file-id={x.id}> <img src={x.iconLink}></img> {x.title} </td>
+                                <td data-file-id={x.id}> {x.modifiedDate} </td>
+                            </tr>
+                        )
+                    }
+                },
+                this);
         }
         return (
             <div className="col-md-10">
