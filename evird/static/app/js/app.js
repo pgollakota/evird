@@ -89,9 +89,19 @@ var EvirdApp = React.createClass({
             <div className="container">
                 <div className="row">
                     <SideBar handleClickTrashFolder={this.handleClickTrashFolder} />
-                    <FilesList
-                        filesList={this.state.filesList}
-                        updateFilesList={this.updateFilesList} />
+                    <div className="col-md-10">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th> Name </th>
+                                    <th> Last Modified </th>
+                                </tr>
+                            </thead>
+                            <FilesList
+                                filesList={this.state.filesList}
+                                updateFilesList={this.updateFilesList} />
+                        </table>
+                    </div>
                 </div>
             </div>
         );
@@ -159,14 +169,7 @@ var FilesList = React.createClass({
                 },
                 this);
         }
-        return (
-            <div className="col-md-10">
-                <table className="table table-striped">
-                    <thead> <tr> <th> Name </th> <th> Last Modified </th> </tr> </thead>
-                    <tbody> {rows} </tbody>
-                </table>
-            </div>
-        );
+        return  <tbody> {rows} </tbody>;
     }
 });
 
