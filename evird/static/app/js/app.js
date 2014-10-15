@@ -48,7 +48,7 @@ function retrieveAllFiles(initialRequest, callback) {
             var nextPageToken = resp.nextPageToken;
             if (nextPageToken) {
                 request = gapi.client.drive.files.list({
-                    'pageToken': nextPageToken
+                    pageToken: nextPageToken
                 });
                 retrievePageOfFiles(request, result);
             } else {
@@ -128,9 +128,7 @@ var SideBar = React.createClass({
 
 
 var FilesList = React.createClass({
-    handleDoubleClickRow: function(ev) {
-        ev.preventDefault();
-        var fileId = ev.target.getAttribute('data-file-id');
+    handleDoubleClickRow: function(fileId) {
         this.props.updateFilesList("'" + fileId + "' in parents and trashed=false");
     },
 
@@ -145,16 +143,16 @@ var FilesList = React.createClass({
                 function(x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
-                            <tr key={x.id} data-file-id={x.id} onDoubleClick={this.handleDoubleClickRow}>
-                                <td data-file-id={x.id}> <img src={x.iconLink}></img> {x.title} </td>
-                                <td data-file-id={x.id}> {x.modifiedDate} </td>
+                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickRow, x.id)}>
+                                <td> <img src={x.iconLink} /> {x.title} </td>
+                                <td> {x.modifiedDate} </td>
                             </tr>
                         )
                     } else {
                         return (
-                            <tr key={x.id} data-file-id={x.id}>
-                                <td data-file-id={x.id}> <img src={x.iconLink}></img> {x.title} </td>
-                                <td data-file-id={x.id}> {x.modifiedDate} </td>
+                            <tr key={x.id}>
+                                <td> <img src={x.iconLink} /> {x.title} </td>
+                                <td> {x.modifiedDate} </td>
                             </tr>
                         )
                     }
@@ -164,7 +162,7 @@ var FilesList = React.createClass({
         return (
             <div className="col-md-10">
                 <table className="table table-striped">
-                    <thead> <td> Name </td> <td> Last Modified </td> </thead>
+                    <thead> <tr> <th> Name </th> <th> Last Modified </th> </tr> </thead>
                     <tbody> {rows} </tbody>
                 </table>
             </div>
