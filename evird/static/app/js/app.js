@@ -169,7 +169,7 @@ var FilesList = React.createClass({
                 },
                 this);
         }
-        return  <tbody> {rows} </tbody>;
+        return  <tbody>{rows}</tbody>;
     }
 });
 
