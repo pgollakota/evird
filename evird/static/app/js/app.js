@@ -67,28 +67,14 @@ var EvirdApp = React.createClass({
     },
 
     componentDidMount: function() {
-        retrieveAllFiles(gapi.client.request(
-            {path: '/drive/v2/files', params: {q: "'root' in parents and trashed=false"}}),
-            function (data) { this.setState({filesList: data}); }.bind(this));
-    },
-
-    updateFilesList: function(q) {
-        retrieveAllFiles(gapi.client.request(
-            {path: '/drive/v2/files', params: {q: q}}),
-            function (data) { this.setState({filesList: data}); }.bind(this));
-    },
-
-    handleClickTrashFolder: function() {
-        retrieveAllFiles(gapi.client.request(
-            {path: '/drive/v2/files', params: {q: "trashed=true"}}),
-            function (data) { this.setState({filesList: data}); }.bind(this));
+        this.updateFilesList("'root' in parents and trashed=false");
     },
 
     render: function () {
         return (
             <div className="container">
                 <div className="row">
-                    <SideBar handleClickTrashFolder={this.handleClickTrashFolder} />
+                    <SideBar updateFilesList={this.updateFilesList} />
                     <div className="col-md-10">
                         <table className="table table-striped">
                             <thead>
@@ -105,8 +91,13 @@ var EvirdApp = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
 
+    updateFilesList: function(q) {
+        retrieveAllFiles(gapi.client.request(
+            {path: '/drive/v2/files', params: {q: q}}),
+            function (data) { this.setState({filesList: data}); }.bind(this));
+    }
 });
 
 
@@ -115,7 +106,9 @@ var SideBar = React.createClass({
         return (
             <div className="col-md-2 sidebar">
                 <ul className="nav nav-sidebar">
-                    <li className="active">
+                    <li onClick={
+                        _.partial(this.props.updateFilesList,
+                            "'root' in parents and trashed=false")}>
                         <a href="#">My Drive</a>
                     </li>
                     <li>
@@ -127,7 +120,7 @@ var SideBar = React.createClass({
                     <li>
                         <a href="#">Starred</a>
                     </li>
-                    <li onClick={this.props.handleClickTrashFolder}>
+                    <li onClick={_.partial(this.props.updateFilesList, 'trashed=true')}>
                         <a href="#">Trash</a>
                     </li>
                 </ul>
