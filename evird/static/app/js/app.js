@@ -63,7 +63,7 @@ function retrieveAllFiles(initialRequest, callback) {
 var EvirdApp = React.createClass({
 
     getInitialState: function() {
-        return {filesList: {}}
+        return {filesList: {}, isLoading: false}
     },
 
     componentDidMount: function() {
@@ -75,28 +75,21 @@ var EvirdApp = React.createClass({
             <div className="container">
                 <div className="row">
                     <SideBar updateFilesList={this.updateFilesList} />
-                    <div className="col-md-10">
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th> Name </th>
-                                    <th> Last Modified </th>
-                                </tr>
-                            </thead>
-                            <FilesList
-                                filesList={this.state.filesList}
-                                updateFilesList={this.updateFilesList} />
-                        </table>
-                    </div>
+                    <FilesList
+                        isLoading={this.state.isLoading}
+                        filesList={this.state.filesList}
+                        updateFilesList={this.updateFilesList}
+                    />
                 </div>
             </div>
         );
     },
 
     updateFilesList: function(q) {
+        this.setState({filesList: [], isLoading: true});
         retrieveAllFiles(gapi.client.request(
             {path: '/drive/v2/files', params: {q: q}}),
-            function (data) { this.setState({filesList: data}); }.bind(this));
+            function (data) { this.setState({filesList: data, isLoading: false}); }.bind(this));
     }
 });
 
@@ -137,6 +130,11 @@ var FilesList = React.createClass({
 
     render: function() {
         var rows = [];
+        if (this.props.isLoading) {
+            return (
+                <div className="col-md-10"> Loading </div>
+            );
+        }
         if (!_.isUndefined(this.props.filesList)) {
             rows = _.map(
                 _.sortBy(
@@ -162,7 +160,19 @@ var FilesList = React.createClass({
                 },
                 this);
         }
-        return  <tbody>{rows}</tbody>;
+        return (
+            <div className="col-md-10">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th> Name </th>
+                            <th> Last Modified </th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>;
+                </table>
+            </div>
+        );
     }
 });
 
