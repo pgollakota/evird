@@ -63,11 +63,20 @@ function retrieveAllFiles(initialRequest, callback) {
 var EvirdApp = React.createClass({
 
     getInitialState: function() {
-        return {filesList: {}, isLoading: false}
+        return {filesList: [], isLoading: false, sortAsc: true}
     },
 
     componentDidMount: function() {
         this.updateFilesList("'root' in parents and trashed=false");
+    },
+
+    resort: function(sortKey) {
+        var sortAsc = this.state.sortAsc;
+        var resorted = _.sortBy(this.state.filesList, sortKey);
+        if (sortAsc) {
+            resorted.reverse();
+        }
+        this.setState({filesList: resorted, sortAsc: !sortAsc});
     },
 
     render: function () {
@@ -79,6 +88,7 @@ var EvirdApp = React.createClass({
                         isLoading={this.state.isLoading}
                         filesList={this.state.filesList}
                         updateFilesList={this.updateFilesList}
+                        resort={this.resort}
                     />
                 </div>
             </div>
@@ -136,11 +146,7 @@ var FilesList = React.createClass({
             );
         }
         if (!_.isUndefined(this.props.filesList)) {
-            rows = _.map(
-                _.sortBy(
-                    this.props.filesList,
-                    function(x) {
-                        return [!(x.mimeType === 'application/vnd.google-apps.folder'), x.title]}),
+            rows = _.map(this.props.filesList,
                 function(x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
@@ -165,7 +171,7 @@ var FilesList = React.createClass({
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th> Name </th>
+                            <th onClick={_.partial(this.props.resort, 'title')}> Name </th>
                             <th> Last Modified </th>
                         </tr>
                     </thead>
