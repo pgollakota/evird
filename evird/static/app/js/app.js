@@ -63,11 +63,16 @@ function retrieveAllFiles(initialRequest, callback) {
 var EvirdApp = React.createClass({
 
     getInitialState: function() {
-        return {filesList: [], isLoading: false, sortAsc: true}
+        return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
     },
 
     componentDidMount: function() {
         this.updateFilesList("'root' in parents and trashed=false");
+    },
+
+    addToCrumbs: function(title) {
+        var crumbs = this.state.crumbs.concat([title]);
+        this.setState({crumbs: crumbs});
     },
 
     resort: function(sortKey) {
@@ -84,12 +89,16 @@ var EvirdApp = React.createClass({
             <div className="container">
                 <div className="row">
                     <SideBar updateFilesList={this.updateFilesList} />
-                    <FilesList
-                        isLoading={this.state.isLoading}
-                        filesList={this.state.filesList}
-                        updateFilesList={this.updateFilesList}
-                        resort={this.resort}
-                    />
+                    <div className="col-md-10">
+                        <BreadCrumb crumbs={this.state.crumbs} />
+                        <FilesList
+                            isLoading={this.state.isLoading}
+                            filesList={this.state.filesList}
+                            updateFilesList={this.updateFilesList}
+                            resort={this.resort}
+                            addToCrumbs={this.addToCrumbs}
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -132,10 +141,19 @@ var SideBar = React.createClass({
     }
 });
 
+var BreadCrumb = React.createClass({
+    render: function() {
+        var crumbsNodes = this.props.crumbs.map(function(crumb) {
+            return <li key={crumb}><a>{crumb}</a></li>;
+        });
+        return <ol className="breadcrumb">{crumbsNodes}</ol>
+    }
+});
 
 var FilesList = React.createClass({
-    handleDoubleClickRow: function(fileId) {
+    handleDoubleClickRow: function(fileId, title) {
         this.props.updateFilesList("'" + fileId + "' in parents and trashed=false");
+        this.props.addToCrumbs(title);
     },
 
     render: function() {
@@ -150,7 +168,7 @@ var FilesList = React.createClass({
                 function(x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
-                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickRow, x.id)}>
+                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickRow, x.id, x.title)}>
                                 <td> <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
                             </tr>
@@ -167,7 +185,7 @@ var FilesList = React.createClass({
                 this);
         }
         return (
-            <div className="col-md-10">
+            <div>
                 <table className="table table-striped">
                     <thead>
                         <tr>
