@@ -1,5 +1,9 @@
 /** @jsx React.DOM */
 
+var _ = require('lodash');
+var $ = require('jquery');
+var React = require('react');
+
 var GoogleApiAuthForm = React.createClass({
     render: function () {
         return (
