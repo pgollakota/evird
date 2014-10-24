@@ -6,8 +6,8 @@ var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 
 var paths = {
-    app_js: ['./evird/src/js/app.jsx'],
-    js: ['./evird/src/js/*.js'],
+    app_js: [
+        './evird/src/js/app.jsx'],
     css: [
         './evird/src/css/main.css',
         './node_modules/bootstrap/dist/css/bootstrap.css',

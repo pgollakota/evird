@@ -2,11 +2,20 @@
 
 var _ = require('lodash');
 var EvirdActionsCreator = require('../actions/EvirdActionsCreator');
+var FileListStore = require('../stores/FileListStore');
 
 var FilesList = React.createClass({
 
     getInitialState: function () {
         return {sortAsc: true, sortBy: 'title'}
+    },
+
+    componentDidMount: function() {
+        FileListStore.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount: function() {
+        FileListStore.removeChangeListener(this._onChange);
     },
 
     handleDoubleClickRow: function (fileId, title) {

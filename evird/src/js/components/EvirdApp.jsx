@@ -10,7 +10,12 @@ var EvirdApp = React.createClass({
     },
 
     componentDidMount: function() {
-        this.updateFilesList("'root' in parents and trashed=false");
+        FileListStore.addChangeListener(this._onChange);
+        //this.updateFilesList("'root' in parents and trashed=false");
+    },
+
+    componentWillUnmount: function() {
+        FileListStore.removeChangeListener(this._onChange);
     },
 
     addToCrumbs: function(title) {
