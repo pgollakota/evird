@@ -1,7 +1,7 @@
 var merge = require('react/lib/merge');
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+var AppDispatcher = require('../dispatcher/AppDispatcher').AppDispatcher;
 var EventEmitter = require('events').EventEmitter;
-var EvirdConstants = require('../constants/EvirdConstants');
+var EvirdConstants = require('../constants/EvirdConstants').EvirdConstants;
 
 var _filesList = [];
 var _sortAsc = true;
