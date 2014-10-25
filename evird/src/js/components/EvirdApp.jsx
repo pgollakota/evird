@@ -1,10 +1,11 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
-var FilesListStore = require('../stores/FilesListStore').FilesListStore;
-var SideBar = require('./SideBar.jsx').SideBar;
 var BreadCrumb = require('./BreadCrumb.jsx').BreadCrumb;
 var FilesList = require('./FilesList.jsx').FilesList;
+var FilesListStore = require('../stores/FilesListStore').FilesListStore;
+var React = require('react');
+var SideBar = require('./SideBar.jsx').SideBar;
 var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
 

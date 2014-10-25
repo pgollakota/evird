@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 
+var React = require('react');
+var EvirdApp = require('../components/EvirdApp.jsx').EvirdApp;
 var gapi = require('../gapi');
-var EvirdApp = require('../components/EvirdApp.jsx');
 
 exports.GoogleApiAuthForm = React.createClass({
     render: function () {

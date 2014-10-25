@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
+var React = require('react');
 
 exports.SideBar = React.createClass({
     render: function() {

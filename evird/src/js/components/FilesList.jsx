@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActionsCreator;
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
+var React = require('react');
 
 exports.FilesList = React.createClass({
 
