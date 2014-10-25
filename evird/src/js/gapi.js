@@ -424,4 +424,4 @@ gapi.load("client", {
     }
 });
 
-exports.gapi = gapi;
+module.exports = gapi;

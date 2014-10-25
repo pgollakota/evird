@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActionsCreator;
-var FileListStore = require('../stores/FileListStore').FilesListStore;
+var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 
 exports.FilesList = React.createClass({
 
@@ -11,11 +11,11 @@ exports.FilesList = React.createClass({
     },
 
     componentDidMount: function() {
-        FileListStore.addChangeListener(this._onChange);
+        FilesListStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function() {
-        FileListStore.removeChangeListener(this._onChange);
+        FilesListStore.removeChangeListener(this._onChange);
     },
 
     handleDoubleClickRow: function (fileId, title) {

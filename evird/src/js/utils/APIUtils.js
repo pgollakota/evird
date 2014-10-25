@@ -1,5 +1,6 @@
 var gapi = require('../gapi');
-var EvirdServerActions = require('../actions/EvirdServerActions');
+var EvirdServerActionsCreator = require(
+    '../actions/EvirdServerActionsCreator').EvirdServerActionsCreator;
 
 exports.retrieveAllFiles = function retrieveAllFiles(initialRequest) {
     var retrievePageOfFiles = function (request, result) {
@@ -12,7 +13,7 @@ exports.retrieveAllFiles = function retrieveAllFiles(initialRequest) {
                 });
                 retrievePageOfFiles(request, result);
             } else {
-                EvirdServerActions.retrievedAll(result);
+                EvirdServerActionsCreator.retrievedAll(result);
             }
         });
     };

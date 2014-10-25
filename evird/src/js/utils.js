@@ -1,7 +1,6 @@
-var gapi = require('./gapi')
+var gapi = require('./gapi');
 
-
-function retrieveAllFiles(initialRequest, callback) {
+exports.retrieveAllFiles = function retrieveAllFiles(initialRequest, callback) {
     var retrievePageOfFiles = function (request, result) {
         request.execute(function (resp) {
             result = result.concat(resp.items);
@@ -17,6 +16,4 @@ function retrieveAllFiles(initialRequest, callback) {
         });
     };
     retrievePageOfFiles(initialRequest, []);
-}
-
-module.exports = retrieveAllFiles;
+};
