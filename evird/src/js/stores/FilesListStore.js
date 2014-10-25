@@ -11,7 +11,7 @@ var CHANGE_EVENT = 'change';
 
 function _changeSortBy (sortBy) {}
 
-var FilesListStore = merge(EventEmitter.prototype, {
+var FilesListStore = exports.FilesListStore = merge(EventEmitter.prototype, {
 
     addChangeListener: function (callback) {
         this.on(CHANGE_EVENT, callback);
@@ -46,5 +46,3 @@ AppDispatcher.register(function (payload) {
 
     return true; // No errors.  Needed by promise in Dispatcher.
 });
-
-module.exports = FilesListStore;

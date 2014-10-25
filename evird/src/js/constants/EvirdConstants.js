@@ -1,7 +1,7 @@
 var keyMirror = require('react/lib/keyMirror');
 
 
-module.exports = {
+exports.EvirdConstants = {
 
   ActionTypes: keyMirror({
     CHANGED_SORT_BY: null,

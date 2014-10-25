@@ -1,7 +1,7 @@
 var gapi = require('../gapi');
 var EvirdServerActions = require('../actions/EvirdServerActions');
 
-function retrieveAllFiles(initialRequest) {
+exports.retrieveAllFiles = function retrieveAllFiles(initialRequest) {
     var retrievePageOfFiles = function (request, result) {
         request.execute(function (resp) {
             result = result.concat(resp.items);
@@ -17,6 +17,4 @@ function retrieveAllFiles(initialRequest) {
         });
     };
     retrievePageOfFiles(initialRequest, []);
-}
-
-module.exports = retrieveAllFiles;
+};

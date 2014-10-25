@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var BreadCrumb = React.createClass({
+exports.BreadCrumb = React.createClass({
     render: function () {
         var crumbsNodes = this.props.crumbs.map(function (crumb) {
             return <li key={crumb}>
@@ -10,5 +10,3 @@ var BreadCrumb = React.createClass({
         return <ol className="breadcrumb">{crumbsNodes}</ol>
     }
 });
-
-module.export = BreadCrumb;

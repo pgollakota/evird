@@ -1,7 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var ActionTypes = require('../constants/EvirdConstants').ActionTypes;
+var AppDispatcher = require('../dispatcher/AppDispatcher').AppDispatcher;
+var ActionTypes = require('../constants/EvirdConstants').EvirdConstants.ActionTypes;
 
-var EvirdActionsCreator = {
+exports.EvirdActionsCreator = {
     changeSortBy: function (sortBy) {
         AppDispatcher.handleViewAction({
             actionType: ActionTypes.CHANGED_SORT_BY,
@@ -9,5 +9,3 @@ var EvirdActionsCreator = {
         });
     }
 };
-
-module.exports = EvirdActionsCreator;

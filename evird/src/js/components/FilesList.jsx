@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
-var EvirdActionsCreator = require('../actions/EvirdActionsCreator');
-var FileListStore = require('../stores/FileListStore');
+var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActionsCreator;
+var FileListStore = require('../stores/FileListStore').FilesListStore;
 
-var FilesList = React.createClass({
+exports.FilesList = React.createClass({
 
     getInitialState: function () {
         return {sortAsc: true, sortBy: 'title'}
@@ -75,5 +75,3 @@ var FilesList = React.createClass({
         EvirdActionsCreator.changeSortBy(sortBy);
     }
 });
-
-module.exports = FilesList;

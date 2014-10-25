@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 
-var SideBar = React.createClass({
+exports.SideBar = React.createClass({
     render: function() {
         return (
             <div className="col-md-2 sidebar">
@@ -29,6 +29,3 @@ var SideBar = React.createClass({
         );
     }
 });
-
-
-module.exports = SideBar;

@@ -1,8 +1,9 @@
 /** @jsx React.DOM */
 
 var gapi = require('../gapi');
+var EvirdApp = require('../components/EvirdApp.jsx');
 
-var GoogleApiAuthForm = React.createClass({
+exports.GoogleApiAuthForm = React.createClass({
     render: function () {
         return (
             <div className="row">
@@ -41,5 +42,3 @@ var GoogleApiAuthForm = React.createClass({
 
     }
 });
-
-module.exports = GoogleApiAuthForm;

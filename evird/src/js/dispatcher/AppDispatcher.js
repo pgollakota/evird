@@ -2,7 +2,7 @@ var Dispatcher = require('flux').Dispatcher;
 var PayloadSources = require('../constants/EvirdConstants').PayloadSources;
 var copyProperties = require('react/lib/copyProperties');
 
-var AppDispatcher = copyProperties(new Dispatcher(), {
+exports.AppDispatcher = copyProperties(new Dispatcher(), {
     handleViewAction: function (action) {
         this.dispatch({
             source: PayloadSources.VIEW_ACTION,
@@ -18,5 +18,3 @@ var AppDispatcher = copyProperties(new Dispatcher(), {
         this.dispatch(payload);
     }
 });
-
-module.exports = AppDispatcher;

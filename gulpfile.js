@@ -6,8 +6,9 @@ var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 
 var paths = {
-    app_js: [
-        './evird/src/js/app.jsx'],
+    js: [
+        './evird/src/js/*.js'
+    ],
     css: [
         './evird/src/css/main.css',
         './node_modules/bootstrap/dist/css/bootstrap.css',
@@ -15,7 +16,7 @@ var paths = {
 };
 
 gulp.task('js', function () {
-    browserify(paths.app_js)
+    browserify('./evird/src/js/app.jsx')
         .transform(reactify)
         .bundle()
         .pipe(source('bundle.js'))

@@ -1,21 +1,25 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
-var FileListStore = require('../stores/FileListStore');
+var FilesListStore = require('../stores/FilesListStore').FilesListStore;
+var SideBar = require('./SideBar.jsx').SideBar;
+var BreadCrumb = require('./BreadCrumb.jsx').BreadCrumb;
+var FilesList = require('./FilesList.jsx').FilesList;
+var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
-var EvirdApp = React.createClass({
+
+exports.EvirdApp = React.createClass({
 
     getInitialState: function() {
         return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
     },
 
     componentDidMount: function() {
-        FileListStore.addChangeListener(this._onChange);
-        //this.updateFilesList("'root' in parents and trashed=false");
+        FilesListStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function() {
-        FileListStore.removeChangeListener(this._onChange);
+        FilesListStore.removeChangeListener(this._onChange);
     },
 
     addToCrumbs: function(title) {
@@ -60,5 +64,3 @@ var EvirdApp = React.createClass({
     }
 
 });
-
-module.exports = EvirdApp;

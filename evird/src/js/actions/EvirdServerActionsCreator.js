@@ -1,7 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var ActionTypes = require('../constants/EvirdConstants').ActionTypes;
+var AppDispatcher = require('../dispatcher/AppDispatcher').AppDispatcher;
+var ActionTypes = require('../constants/EvirdConstants').EvirdConstants.ActionTypes;
 
-module.exports = {
+exports.EvirdServerActionsCreator = {
     retrievedAll: function (files) {
         AppDispatcher.handleServerAction({
             actionType: ActionTypes.RETRIEVED_ALL_FILES,
