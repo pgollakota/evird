@@ -1,5 +1,5 @@
 var Dispatcher = require('flux').Dispatcher;
-var PayloadSources = require('../constants/EvirdConstants').PayloadSources;
+var PayloadSources = require('../constants/EvirdConstants').EvirdConstants.PayloadSources;
 var copyProperties = require('react/lib/copyProperties');
 
 exports.AppDispatcher = copyProperties(new Dispatcher(), {

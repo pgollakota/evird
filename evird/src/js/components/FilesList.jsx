@@ -5,18 +5,22 @@ var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActions
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 var React = require('react');
 
+function getStateFromStores() {
+    return FilesListStore.getFiles();
+}
+
 exports.FilesList = React.createClass({
 
     getInitialState: function () {
-        return {sortAsc: true, sortBy: 'title'}
+        return {files: getStateFromStores()};
     },
 
     componentDidMount: function() {
-        FilesListStore.addChangeListener(this._onChange);
+        FilesListStore.on('change', this._onChange)
     },
 
     componentWillUnmount: function() {
-        FilesListStore.removeChangeListener(this._onChange);
+        FilesListStore.removeListener('change', this._onChange);
     },
 
     handleDoubleClickRow: function (fileId, title) {
@@ -72,7 +76,12 @@ exports.FilesList = React.createClass({
         );
     },
 
-    _changeSortBy: function (sortBy) {
-        EvirdActionsCreator.changeSortBy(sortBy);
+    _sort: function() {
+
+    },
+
+    _onChange: function () {
+        this.setState(getStateFromStores());
     }
+
 });

@@ -3,6 +3,7 @@
 var React = require('react');
 var EvirdApp = require('../components/EvirdApp.jsx').EvirdApp;
 var gapi = require('../gapi');
+var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
 exports.GoogleApiAuthForm = React.createClass({
     render: function () {
@@ -30,15 +31,15 @@ exports.GoogleApiAuthForm = React.createClass({
         var clientId = this.refs.clientId.getDOMNode().value.trim();
 
         (function checkAuth() {
-            gapi.auth.authorize({client_id: clientId, scope: scopes},
+            require('../gapi').auth.authorize({client_id: clientId, scope: scopes},
                 handleAuthResult);
         })();
 
         function handleAuthResult(result) {
+            console.log(document.getElementById('app'));
+            console.log(React);
             // FIXME: Handle fail result
-            gapi.client.load('drive', 'v2').then(function() {
                 React.renderComponent(<EvirdApp />, document.getElementById('app'));
-            });
         }
 
     }
