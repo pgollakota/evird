@@ -36,8 +36,8 @@ exports.FilesList = React.createClass({
             );
         }
 
-        if (!_.isUndefined(this.props.filesList)) {
-            rows = _.map(this.props.filesList,
+        if (!_.isUndefined(this.state.files)) {
+            rows = _.map(this.state.files,
                 function (x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
@@ -81,7 +81,7 @@ exports.FilesList = React.createClass({
     },
 
     _onChange: function () {
-        this.setState(getStateFromStores());
+        this.setState({files: getStateFromStores()});
     }
 
 });

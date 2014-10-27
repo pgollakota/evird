@@ -13,7 +13,6 @@ exports.retrieveAllFiles = function retrieveAllFiles(initialRequest) {
                 });
                 retrievePageOfFiles(request, result);
             } else {
-                console.log(result);
                 EvirdServerActionsCreator.retrievedAll(result);
             }
         });

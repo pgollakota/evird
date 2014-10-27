@@ -36,11 +36,14 @@ exports.GoogleApiAuthForm = React.createClass({
         })();
 
         function handleAuthResult(result) {
-            console.log(document.getElementById('app'));
-            console.log(React);
-            // FIXME: Handle fail result
+            gapi.client.load('drive', 'v2').then(function() {
+                // FIXME: Handle fail result
+                retrieveAllFiles(
+                    gapi.client.request({
+                        path: '/drive/v2/files',
+                        params: {q: "'root' in parents and trashed=false"}}));
                 React.renderComponent(<EvirdApp />, document.getElementById('app'));
+            });
         }
-
     }
 });

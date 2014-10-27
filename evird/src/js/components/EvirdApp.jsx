@@ -15,14 +15,6 @@ exports.EvirdApp = React.createClass({
         return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
     },
 
-    componentDidMount: function() {
-        FilesListStore.addChangeListener(this._onChange);
-    },
-
-    componentWillUnmount: function() {
-        FilesListStore.removeChangeListener(this._onChange);
-    },
-
     addToCrumbs: function(title) {
         var crumbs = this.state.crumbs.concat([title]);
         this.setState({crumbs: crumbs});
