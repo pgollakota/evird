@@ -8,9 +8,7 @@ exports.SideBar = React.createClass({
         return (
             <div className="col-md-2 sidebar">
                 <ul className="nav nav-sidebar">
-                    <li onClick={
-                        _.partial(this.props.updateFilesList,
-                            "'root' in parents and trashed=false")}>
+                    <li>
                         <a href="#">My Drive</a>
                     </li>
                     <li>
@@ -22,7 +20,7 @@ exports.SideBar = React.createClass({
                     <li>
                         <a href="#">Starred</a>
                     </li>
-                    <li onClick={_.partial(this.props.updateFilesList, 'trashed=true')}>
+                    <li>
                         <a href="#">Trash</a>
                     </li>
                 </ul>

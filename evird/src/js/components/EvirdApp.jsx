@@ -6,7 +6,6 @@ var FilesList = require('./FilesList.jsx').FilesList;
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 var React = require('react');
 var SideBar = require('./SideBar.jsx').SideBar;
-var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
 
 exports.EvirdApp = React.createClass({
@@ -33,7 +32,7 @@ exports.EvirdApp = React.createClass({
         return (
             <div className="container">
                 <div className="row">
-                    <SideBar updateFilesList={this.updateFilesList} />
+                    <SideBar />
                     <div className="col-md-10">
                         <BreadCrumb crumbs={this.state.crumbs} />
                         <FilesList
@@ -48,12 +47,4 @@ exports.EvirdApp = React.createClass({
             </div>
         );
     },
-
-    updateFilesList: function(q) {
-        this.setState({filesList: [], isLoading: true});
-        retrieveAllFiles(gapi.client.request(
-            {path: '/drive/v2/files', params: {q: q}}),
-            function (data) { this.setState({filesList: data, isLoading: false}); }.bind(this));
-    }
-
 });

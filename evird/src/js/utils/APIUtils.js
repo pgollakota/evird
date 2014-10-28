@@ -2,7 +2,10 @@ var gapi = require('../gapi');
 var EvirdServerActionsCreator = require(
     '../actions/EvirdServerActionsCreator').EvirdServerActionsCreator;
 
-exports.retrieveAllFiles = function retrieveAllFiles(initialRequest) {
+exports.retrieveAllFiles = function retrieveAllFiles(q) {
+    var initialRequest = gapi.client.request(
+            {path: '/drive/v2/files', params: {q: q}});
+
     var retrievePageOfFiles = function (request, result) {
         request.execute(function (resp) {
             result = result.concat(resp.items);

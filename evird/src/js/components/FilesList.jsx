@@ -23,9 +23,8 @@ exports.FilesList = React.createClass({
         FilesListStore.removeListener('change', this._onChange);
     },
 
-    handleDoubleClickRow: function (fileId, title) {
-        this.props.updateFilesList("'" + fileId + "' in parents and trashed=false");
-        this.props.addToCrumbs(title);
+    handleDoubleClickFolder: function (fileId) {
+        EvirdActionsCreator.openFolder(fileId)
     },
 
     render: function () {
