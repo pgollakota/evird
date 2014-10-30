@@ -46,5 +46,5 @@ exports.EvirdApp = React.createClass({
                 </div>
             </div>
         );
-    },
+    }
 });

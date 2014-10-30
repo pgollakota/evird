@@ -4,18 +4,12 @@ var EvirdApp = require('../components/EvirdApp.jsx').EvirdApp;
 var EvirdServerActionsCreator = require('../actions/EvirdServerActionsCreator').EvirdServerActionsCreator;
 var EvirdStore = require('../stores/EvirdStore').EvirdStore;
 var React = require('react');
+var Reflux = require('reflux');
 var gapi = require('../gapi');
 var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
 
 exports.GoogleApiAuthForm = React.createClass({
-    componentDidMount: function() {
-        EvirdStore.on('change', this._onChange);
-    },
-
-    componentWillUnmount: function() {
-        EvirdStore.removeListener('change', this._onChange);
-    },
 
     render: function () {
         return (
@@ -36,13 +30,6 @@ exports.GoogleApiAuthForm = React.createClass({
         );
     },
 
-    handleSubmit: function(ev) {
-        ev.preventDefault();
-        var clientId = this.refs.clientId.getDOMNode().value.trim();
-        EvirdServerActionsCreator.authorize(clientId);
-    },
+    mixins: [Reflux.connect(EvirdStore, 'files')]
 
-    _onChange: function() {
-        React.renderComponent(<EvirdApp />, document.getElementById('app'));
-    }
 });
