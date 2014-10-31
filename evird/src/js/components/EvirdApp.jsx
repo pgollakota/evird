@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var BreadCrumb = require('./BreadCrumb.jsx').BreadCrumb;
 var FilesList = require('./FilesList.jsx').FilesList;
-var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 var React = require('react');
 var SideBar = require('./SideBar.jsx').SideBar;
 

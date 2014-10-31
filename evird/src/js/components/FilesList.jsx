@@ -4,28 +4,9 @@ var _ = require('lodash');
 var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActionsCreator;
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 var React = require('react');
-
-function getStateFromStores() {
-    return FilesListStore.getFiles();
-}
+var Reflux = require('reflux');
 
 exports.FilesList = React.createClass({
-
-    getInitialState: function () {
-        return {files: getStateFromStores()};
-    },
-
-    componentDidMount: function() {
-        FilesListStore.on('change', this._onChange)
-    },
-
-    componentWillUnmount: function() {
-        FilesListStore.removeListener('change', this._onChange);
-    },
-
-    handleDoubleClickFolder: function (fileId) {
-        EvirdActionsCreator.openFolder(fileId)
-    },
 
     render: function () {
         var rows = [];
@@ -75,12 +56,21 @@ exports.FilesList = React.createClass({
         );
     },
 
-    _sort: function() {
 
+    mixins: [Reflux.listenTo(FilesListStore, "onFilesListChange")],
+
+    getInitialState: function () {
+        return {files: FilesListStore.data.files};
     },
 
-    _onChange: function () {
-        this.setState({files: getStateFromStores()});
-    }
+    onFilesListChange: function(files) {
+        this.setState({files: files})
+    },
+
+    handleDoubleClickFolder: function (fileId) {
+        EvirdActionsCreator.openFolder(fileId)
+    },
+
+    _sort: function() {}
 
 });

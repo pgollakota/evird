@@ -1,46 +1,19 @@
-var merge = require('react/lib/merge');
-var AppDispatcher = require('../dispatcher/AppDispatcher').AppDispatcher;
-var EventEmitter = require('events').EventEmitter;
-var ActionTypes = require('../constants/EvirdConstants').EvirdConstants.ActionTypes;
+var EvirdServerActions = require('../actions/EvirdServerActionsCreator');
+var Reflux = require('reflux');
 
-var _filesList = [];
-var _sortAsc = true;
-var _sortBy = 'title';
+var FilesListStore = exports.FilesListStore = Reflux.createStore({
 
-var CHANGE_EVENT = 'change';
+    init: function() {
+        this.data = {files: [], sortAsc: true, sortBy: 'title'};
 
-var FilesListStore = exports.FilesListStore = merge(EventEmitter.prototype, {
-
-    addChangeListener: function (callback) {
-        this.on(CHANGE_EVENT, callback);
+        this.listenToMany([
+            EvirdServerActions.retrieveFiles.retrieveFilesFulfilled
+        ]);
     },
 
-    removeChangeListener: function (callback) {
-        this.removeListener(CHANGE_EVENT, callback);
-    },
-
-    emitChange: function () {
-        this.emit(CHANGE_EVENT);
-    },
-
-    getFiles: function () {
-        return _filesList;
+    onRetrieveFilesFulfilled: function(files) {
+        this.data.files = files;
+        this.trigger(this.data.files);
     }
 
-});
-
-AppDispatcher.register(function (payload) {
-    var action = payload.action;
-
-    switch (action.actionType) {
-        case ActionTypes.RETRIEVED_ALL_FILES:
-            _filesList = action.files;
-            break;
-        default:
-            return true;
-    }
-
-    FilesListStore.emitChange();
-
-    return true; // No errors.  Needed by promise in Dispatcher.
 });

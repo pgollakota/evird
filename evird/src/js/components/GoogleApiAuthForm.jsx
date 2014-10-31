@@ -1,12 +1,10 @@
 /** @jsx React.DOM */
 
 var EvirdApp = require('../components/EvirdApp.jsx').EvirdApp;
-var EvirdServerActionsCreator = require('../actions/EvirdServerActionsCreator').EvirdServerActionsCreator;
+var EvirdServerActions = require('../actions/EvirdServerActionsCreator');
 var EvirdStore = require('../stores/EvirdStore').EvirdStore;
 var React = require('react');
 var Reflux = require('reflux');
-var gapi = require('../gapi');
-var retrieveAllFiles = require('../utils/APIUtils').retrieveAllFiles;
 
 
 exports.GoogleApiAuthForm = React.createClass({
@@ -30,6 +28,16 @@ exports.GoogleApiAuthForm = React.createClass({
         );
     },
 
-    mixins: [Reflux.connect(EvirdStore, 'files')]
+    mixins: [
+        Reflux.listenTo(EvirdStore, "renderApp")
+    ],
 
+    renderApp: function() {
+        React.renderComponent(<EvirdApp />, document.getElementById('app'));
+    },
+
+    handleSubmit: function(ev) {
+        ev.preventDefault();
+        EvirdServerActions.authorize(this.refs.clientId.getDOMNode().value).bind(this);
+    }
 });

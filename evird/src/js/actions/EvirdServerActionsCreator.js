@@ -1,62 +1,68 @@
 var gapi = require('../gapi');
-var AppDispatcher = require('../dispatcher/AppDispatcher').AppDispatcher;
-var ActionTypes = require('../constants/EvirdConstants').EvirdConstants.ActionTypes;
 var Reflux = require('reflux');
 
 var authorize = Reflux.createAction({
     preEmit: function(clientId) {
         var scopes = ['https://www.googleapis.com/auth/drive.readonly'];
         gapi.auth.authorize({client_id: clientId, scope: scopes}, function (result) {
-            return result;
+            console.log('returning authorizeCallback');
+            return authorizeCallback(result);
         });
     }
 });
+
+var authorizeCallback = Reflux.createAction('authorizeCallback');
+
+authorizeCallback.preEmit = function () {
+    console.log('in authorize callback');
+    console.log(arguments);
+};
+
+exports.authorize = authorize;
+exports.authorizeCallback = authorizeCallback;
 
 var loadDriveApi = Reflux.createAction({
     preEmit: function() {
+        console.log('preemit for loadDriveApi')
         gapi.client.load('drive', 'v2').then(
-            function() {return true;},
-            function() {console.log('Loading api failed')})
-    },
-
-    shouldEmit: function(retval) {
-        return !!retval;
+            loadDriveApiFulfilled(),
+            loadDriveApiRejected()
+        );
     }
-
 });
 
-exports.Actions = {
-    authorize: authorize, loadDriveApi: loadDriveApi
+var loadDriveApiFulfilled  = Reflux.createAction('loadDriveApiFulfilled');
+var loadDriveApiRejected  = Reflux.createAction('loadDriveApiRejected');
+
+exports.loadDriveApi = loadDriveApi;
+exports.loadDriveApiFulfilled = loadDriveApiFulfilled;
+exports.loadDriveApiRejected = loadDriveApiRejected;
+
+
+var retrieveFiles= Reflux.createActions([
+    'retrieveFiles', 'retrieveFilesFulfilled']);
+
+retrieveFiles.retrieveFiles.preEmit = function retrieveAllFiles(q) {
+    var initialRequest = gapi.client.request(
+            {path: '/drive/v2/files', params: {q: q}});
+
+    var retrievePageOfFiles = function (request, result) {
+        request.execute(function (resp) {
+            result = result.concat(resp.items);
+            var nextPageToken = resp.nextPageToken;
+            if (nextPageToken) {
+                request = gapi.client.drive.files.list({
+                    pageToken: nextPageToken
+                });
+                retrievePageOfFiles(request, result);
+            } else {
+                retrieveFiles.retrieveFilesFulfilled(result);
+            }
+        });
+    };
+    retrievePageOfFiles(initialRequest, []);
 };
 
-exports.EvirdServerActionsCreator = {
+exports.retrieveFiles = retrieveFiles.retrieveFiles;
+exports.retriveFilesFulfilled = retrieveFiles.retrieveFilesFulfilled;
 
-    retrievedAll: function (files) {
-        AppDispatcher.handleServerAction({
-            actionType: ActionTypes.RETRIEVED_ALL_FILES,
-            files: files
-        });
-    },
-
-    authorize: function(clientId) {
-        var scopes = ['https://www.googleapis.com/auth/drive.readonly'];
-        gapi.auth.authorize({client_id: clientId, scope: scopes}, function (result) {
-            AppDispatcher.handleServerAction({
-                actionType: ActionTypes.GAPI_AUTHORIZED,
-                result: result
-            });
-        });
-    },
-
-    loadDriveAPI: function() {
-        gapi.client.load('drive', 'v2').then(function() {
-            AppDispatcher.handleServerAction({
-                actionType: ActionTypes.DRIVE_API_LOADED
-            })
-        }, function() {
-           AppDispatcher.handleServerAction({
-                actionType: ActionTypes.DRIVE_API_LOAD_FAILED
-            })
-        });
-    }
-};
