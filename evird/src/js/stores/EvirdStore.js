@@ -12,12 +12,10 @@ var EvirdStore = exports.EvirdStore = Reflux.createStore({
     },
 
     onAuthorizeCallback: function() {
-        console.log('in onAuthorizeCallbac');
         EvirdServerActions.loadDriveApi();
     },
 
     onLoadDriveApiFulfilled: function() {
-        console.log('in on load drive api fulfilled')
         this.data.driveApiLoaded = true;
         this.trigger(this.data);
     }

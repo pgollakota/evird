@@ -6,9 +6,7 @@ var FilesListStore = exports.FilesListStore = Reflux.createStore({
     init: function() {
         this.data = {files: [], sortAsc: true, sortBy: 'title'};
 
-        this.listenToMany([
-            EvirdServerActions.retrieveFiles.retrieveFilesFulfilled
-        ]);
+        this.listenTo(EvirdServerActions.retrieveFilesFulfilled, this.onRetrieveFilesFulfilled);
     },
 
     onRetrieveFilesFulfilled: function(files) {

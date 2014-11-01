@@ -21,7 +21,7 @@ exports.FilesList = React.createClass({
                 function (x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
-                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickRow, x.id, x.title)}>
+                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickFolder, x.id, x.title)}>
                                 <td>
                                     <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
@@ -56,7 +56,6 @@ exports.FilesList = React.createClass({
         );
     },
 
-
     mixins: [Reflux.listenTo(FilesListStore, "onFilesListChange")],
 
     getInitialState: function () {
@@ -71,6 +70,6 @@ exports.FilesList = React.createClass({
         EvirdActionsCreator.openFolder(fileId)
     },
 
-    _sort: function() {}
+    _sort: function() {},
 
 });

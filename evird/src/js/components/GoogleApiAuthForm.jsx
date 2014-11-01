@@ -33,11 +33,13 @@ exports.GoogleApiAuthForm = React.createClass({
     ],
 
     renderApp: function() {
+        EvirdServerActions.retrieveFiles();
         React.renderComponent(<EvirdApp />, document.getElementById('app'));
     },
 
     handleSubmit: function(ev) {
         ev.preventDefault();
+
         EvirdServerActions.authorize(this.refs.clientId.getDOMNode().value).bind(this);
     }
 });
