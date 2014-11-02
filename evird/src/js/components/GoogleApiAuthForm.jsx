@@ -33,7 +33,7 @@ exports.GoogleApiAuthForm = React.createClass({
     ],
 
     renderApp: function() {
-        EvirdServerActions.retrieveFiles();
+        EvirdServerActions.retrieveFiles("'root' in parents and trashed = false");
         React.renderComponent(<EvirdApp />, document.getElementById('app'));
     },
 
