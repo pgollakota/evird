@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
-var EvirdActionsCreator = require('../actions/EvirdActionsCreator').EvirdActionsCreator;
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
 var React = require('react');
 var Reflux = require('reflux');
@@ -10,7 +9,7 @@ exports.FilesList = React.createClass({
 
     render: function () {
         var rows = [];
-        if (this.props.isLoading) {
+        if (this.state.isLoading) {
             return (
                 <div className="col-md-10"> Loading </div>
             );
@@ -56,20 +55,24 @@ exports.FilesList = React.createClass({
         );
     },
 
-    mixins: [Reflux.listenTo(FilesListStore, "onFilesListChange")],
+    mixins: [
+        Reflux.listenTo(FilesListStore, "onFilesListChange")
+    ],
 
     getInitialState: function () {
         return {files: FilesListStore.data.files};
     },
 
-    onFilesListChange: function(files) {
-        this.setState({files: files})
+    onFilesListChange: function(fileListStoreData) {
+        this.setState({files: fileListStoreData.files, isLoading: fileListStoreData.isLoading});
     },
 
     handleDoubleClickFolder: function (fileId) {
-        EvirdActionsCreator.openFolder(fileId)
+
     },
 
-    _sort: function() {},
+    _sort: function(sortBy) {
+
+    }
 
 });
