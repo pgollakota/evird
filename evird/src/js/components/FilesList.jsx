@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var FilesListStore = require('../stores/FilesListStore').FilesListStore;
+var EvirdServerActions = require('../actions/EvirdServerActionsCreator');
 var React = require('react');
 var Reflux = require('reflux');
 
@@ -20,7 +21,7 @@ exports.FilesList = React.createClass({
                 function (x) {
                     if (x.mimeType === 'application/vnd.google-apps.folder') {
                         return (
-                            <tr key={x.id} onDoubleClick={_.partial(this.handleDoubleClickFolder, x.id, x.title)}>
+                            <tr key={x.id} onDoubleClick={_.partial(this.openFolder, x.id)}>
                                 <td>
                                     <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
@@ -44,12 +45,11 @@ exports.FilesList = React.createClass({
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th onClick={_.partial(this._sort, 'title')}> Name </th>
+                            <th onClick={_.partial(this.sortFiles, 'title')}> Name </th>
                             <th> Last Modified </th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>
-                ;
                 </table>
             </div>
         );
@@ -63,16 +63,16 @@ exports.FilesList = React.createClass({
         return {files: FilesListStore.data.files};
     },
 
+    openFolder: function(fileId) {
+        EvirdServerActions.retrieveFiles("'" + fileId + "' in parents and trashed=false");
+    },
+
+    sortFiles: function(sortBy) {
+        FilesListStore.actions.sortFiles(sortBy);
+    },
+
     onFilesListChange: function(fileListStoreData) {
         this.setState({files: fileListStoreData.files, isLoading: fileListStoreData.isLoading});
-    },
-
-    handleDoubleClickFolder: function (fileId) {
-
-    },
-
-    _sort: function(sortBy) {
-
     }
 
 });

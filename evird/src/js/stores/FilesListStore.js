@@ -2,13 +2,15 @@ var _ = require('lodash');
 var EvirdServerActions = require('../actions/EvirdServerActionsCreator');
 var Reflux = require('reflux');
 
-var FilesListStore = exports.FilesListStore = Reflux.createStore({
+
+exports.FilesListStore = Reflux.createStore({
 
     init: function() {
         this.data = {files: [], sortAsc: true, sortBy: null, isLoading: true};
 
         this.listenTo(EvirdServerActions.retrieveFilesFulfilled, this.onRetrieveFilesFulfilled);
         this.listenTo(EvirdServerActions.retrieveFiles, this.onRetrieveFiles);
+        this.listenTo(this.actions.sortFiles, this.onSortBy);
     },
 
     onRetrieveFiles: function() {
@@ -22,6 +24,22 @@ var FilesListStore = exports.FilesListStore = Reflux.createStore({
         );
         this.data.isLoading = false;
         this.trigger(this.data);
+    },
+
+    onSortBy: function (sortBy) {
+        this.data.files = _.sortBy(this.data.files, sortBy);
+        this.trigger(this.data);
+    },
+
+    actions: {
+
+        openFolder: Reflux.createAction({
+            preEmit: function (fileId) {
+                EvirdServerActions.retrieveFiles("'" + fileId + "' in parents and trashed=false");
+            }
+        }),
+
+        sortFiles: Reflux.createAction('sortFiles')
     }
 
 });

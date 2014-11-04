@@ -40,6 +40,6 @@ exports.GoogleApiAuthForm = React.createClass({
     handleSubmit: function(ev) {
         ev.preventDefault();
 
-        EvirdServerActions.authorize(this.refs.clientId.getDOMNode().value).bind(this);
+        EvirdServerActions.authorize(this.refs.clientId.getDOMNode().value);
     }
 });

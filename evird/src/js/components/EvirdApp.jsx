@@ -9,24 +9,6 @@ var SideBar = require('./SideBar.jsx').SideBar;
 
 exports.EvirdApp = React.createClass({
 
-    getInitialState: function() {
-        return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
-    },
-
-    addToCrumbs: function(title) {
-        var crumbs = this.state.crumbs.concat([title]);
-        this.setState({crumbs: crumbs});
-    },
-
-    resort: function(sortKey) {
-        var sortAsc = this.state.sortAsc;
-        var resorted = _.sortBy(this.state.filesList, sortKey);
-        if (sortAsc) {
-            resorted.reverse();
-        }
-        this.setState({filesList: resorted, sortAsc: !sortAsc});
-    },
-
     render: function () {
         return (
             <div className="container">
@@ -45,5 +27,24 @@ exports.EvirdApp = React.createClass({
                 </div>
             </div>
         );
-    }
+    },
+
+    getInitialState: function() {
+        return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
+    },
+
+    addToCrumbs: function(title) {
+        var crumbs = this.state.crumbs.concat([title]);
+        this.setState({crumbs: crumbs});
+    },
+
+    resort: function(sortKey) {
+        var sortAsc = this.state.sortAsc;
+        var resorted = _.sortBy(this.state.filesList, sortKey);
+        if (sortAsc) {
+            resorted.reverse();
+        }
+        this.setState({filesList: resorted, sortAsc: !sortAsc});
+    },
+
 });
