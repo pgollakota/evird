@@ -33,7 +33,11 @@ exports.loadDriveApiRejected = loadDriveApiRejected;
 
 
 var retrieveFiles = Reflux.createAction({
-    preEmit: function retrieveAllFiles(q) {
+    preEmit: function retrieveAllFiles(parentFolderId, trashed) {
+        parentFolderId = parentFolderId || 'root';
+        trashed = !!trashed;
+        var q = '"' + parentFolderId + '" in parents and trashed=' + trashed;
+
         var initialRequest = gapi.client.request(
             {path: '/drive/v2/files', params: {q: q}});
 
@@ -47,7 +51,7 @@ var retrieveFiles = Reflux.createAction({
                     });
                     retrievePageOfFiles(request, result);
                 } else {
-                    retrieveFilesFulfilled(result);
+                    retrieveFilesFulfilled({files: result, parentFolderId: parentFolderId});
                 }
             });
         };

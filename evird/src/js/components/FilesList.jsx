@@ -64,7 +64,7 @@ exports.FilesList = React.createClass({
     },
 
     openFolder: function(fileId) {
-        EvirdServerActions.retrieveFiles("'" + fileId + "' in parents and trashed=false");
+        EvirdServerActions.retrieveFiles(fileId);
     },
 
     sortFiles: function(sortBy) {
