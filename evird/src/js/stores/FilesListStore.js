@@ -6,7 +6,15 @@ var Reflux = require('reflux');
 exports.FilesListStore = Reflux.createStore({
 
     init: function() {
-        this.data = {files: [], sortAsc: true, sortBy: null, isLoading: true, parents: []};
+        this.data = {
+            files: [],
+            sortAsc: true,
+            sortBy: null,
+            isLoading: true,
+            parents: [
+                {id: 'root', title: 'My Drive'}
+            ]
+        };
 
         this.listenTo(EvirdServerActions.retrieveFilesFulfilled, this.onRetrieveFilesFulfilled);
         this.listenTo(EvirdServerActions.retrieveFiles, this.onRetrieveFiles);
@@ -21,15 +29,13 @@ exports.FilesListStore = Reflux.createStore({
     onRetrieveFilesFulfilled: function(payload) {
         this.data.isLoading = false;
         var parentFolderIdIndex = _.findIndex(this.data.parents, {id: payload.parentFolderId});
-        if (payload.parentFolderId !== 'root') {
-            if (parentFolderIdIndex !== -1) {
-                this.data.parents.slice(0, parentFolderIdIndex);
-            } else {
-                this.data.parents.push({
-                    id: payload.parentFolderId,
-                    title: _.find(this.data.files, {id: payload.parentFolderId}).title
-                })
-            }
+        if (parentFolderIdIndex !== -1) {
+            this.data.parents = this.data.parents.slice(0, parentFolderIdIndex + 1);
+        } else {
+            this.data.parents.push({
+                id: payload.parentFolderId,
+                title: _.find(this.data.files, {id: payload.parentFolderId}).title
+            })
         }
         this.data.files = _.sortBy(payload.files, this.data.sortBy || function(f) {
                 return [f.mimeType !== 'application/vnd.google-apps.folder', f.title]}
