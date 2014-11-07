@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require('lodash');
+var EvirdServerActions = require('../actions/EvirdServerActionsCreator');
 var React = require('react');
 
 exports.SideBar = React.createClass({
@@ -17,7 +18,7 @@ exports.SideBar = React.createClass({
                     <li>
                         <a href="#">Recent</a>
                     </li>
-                    <li>
+                    <li onClick={_.partial(this.changeRoute, 'starred')}>
                         <a href="#">Starred</a>
                     </li>
                     <li>
@@ -26,5 +27,11 @@ exports.SideBar = React.createClass({
                 </ul>
             </div>
         );
+    },
+
+    changeRoute: function (route) {
+        if (route === 'starred') {
+            EvirdServerActions.retrieveFiles(null, false, true);
+        }
     }
 });
