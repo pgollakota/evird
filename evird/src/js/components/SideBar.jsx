@@ -9,7 +9,7 @@ exports.SideBar = React.createClass({
         return (
             <div className="col-md-2 sidebar">
                 <ul className="nav nav-sidebar">
-                    <li>
+                    <li onClick={_.partial(this.changeRoute, 'myDrive')}>
                         <a href="#">My Drive</a>
                     </li>
                     <li>
@@ -21,7 +21,7 @@ exports.SideBar = React.createClass({
                     <li onClick={_.partial(this.changeRoute, 'starred')}>
                         <a href="#">Starred</a>
                     </li>
-                    <li>
+                    <li onClick={_.partial(this.changeRoute, 'trashed')}>
                         <a href="#">Trash</a>
                     </li>
                 </ul>
@@ -30,8 +30,13 @@ exports.SideBar = React.createClass({
     },
 
     changeRoute: function (route) {
-        if (route === 'starred') {
+        if (route === 'myDrive') {
+            EvirdServerActions.retrieveFiles(null, false, false);
+        } else if (route === 'starred') {
             EvirdServerActions.retrieveFiles(null, false, true);
+        } else if (route === 'trashed') {
+            console.log('trahsed')
+            EvirdServerActions.retrieveFiles(null, true, false);
         }
     }
 });
