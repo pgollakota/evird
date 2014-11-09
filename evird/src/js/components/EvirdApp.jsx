@@ -15,36 +15,11 @@ exports.EvirdApp = React.createClass({
                 <div className="row">
                     <SideBar />
                     <div className="col-md-10">
-                        <BreadCrumb crumbs={this.state.crumbs} />
-                        <FilesList
-                            isLoading={this.state.isLoading}
-                            filesList={this.state.filesList}
-                            updateFilesList={this.updateFilesList}
-                            resort={this.resort}
-                            addToCrumbs={this.addToCrumbs}
-                        />
+                        <BreadCrumb />
+                        <FilesList />
                     </div>
                 </div>
             </div>
         );
-    },
-
-    getInitialState: function() {
-        return {filesList: [], isLoading: false, sortAsc: true, crumbs: []};
-    },
-
-    addToCrumbs: function(title) {
-        var crumbs = this.state.crumbs.concat([title]);
-        this.setState({crumbs: crumbs});
-    },
-
-    resort: function(sortKey) {
-        var sortAsc = this.state.sortAsc;
-        var resorted = _.sortBy(this.state.filesList, sortKey);
-        if (sortAsc) {
-            resorted.reverse();
-        }
-        this.setState({filesList: resorted, sortAsc: !sortAsc});
-    },
-
+    }
 });

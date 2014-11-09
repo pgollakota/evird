@@ -35,7 +35,6 @@ exports.SideBar = React.createClass({
         } else if (route === 'starred') {
             EvirdServerActions.retrieveFiles(null, false, true);
         } else if (route === 'trashed') {
-            console.log('trahsed')
             EvirdServerActions.retrieveFiles(null, true, false);
         }
     }
