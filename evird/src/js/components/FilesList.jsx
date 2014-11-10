@@ -46,7 +46,7 @@ exports.FilesList = React.createClass({
                     <thead>
                         <tr>
                             <th onClick={_.partial(this.sortFiles, 'title')}> Name </th>
-                            <th> Last Modified </th>
+                            <th onClick={_.partial(this.sortFiles, 'modifiedDate')}> Last Modified </th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>
