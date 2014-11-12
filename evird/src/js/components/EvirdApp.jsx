@@ -5,6 +5,7 @@ var BreadCrumb = require('./BreadCrumb.jsx').BreadCrumb;
 var FilesList = require('./FilesList.jsx').FilesList;
 var React = require('react');
 var SideBar = require('./SideBar.jsx').SideBar;
+var SearchBar = require('./SearchBar.jsx').SearchBar;
 
 
 exports.EvirdApp = React.createClass({
@@ -16,6 +17,7 @@ exports.EvirdApp = React.createClass({
                     <SideBar />
                     <div className="col-md-10">
                         <BreadCrumb />
+                        <SearchBar />
                         <FilesList />
                     </div>
                 </div>
