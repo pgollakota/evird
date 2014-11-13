@@ -31,6 +31,7 @@ exports.FilesList = React.createClass({
                         return (
                             <tr key={x.id}>
                                 <td>
+                                    {x.labels.starred? <i className="fa fa-star"></i>: null}
                                     <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
                             </tr>
