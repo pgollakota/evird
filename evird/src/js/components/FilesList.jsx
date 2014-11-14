@@ -25,6 +25,7 @@ exports.FilesList = React.createClass({
                                 <td>
                                     <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
+                                <td> {x.lastModifyingUserName} </td>
                             </tr>
                         )
                     } else {
@@ -34,6 +35,7 @@ exports.FilesList = React.createClass({
                                     {x.labels.starred? <i className="fa fa-star"></i>: null}
                                     <img src={x.iconLink} /> {x.title} </td>
                                 <td> {x.modifiedDate} </td>
+                                <td> {x.lastModifyingUserName} </td>
                             </tr>
                         )
                     }
@@ -48,6 +50,7 @@ exports.FilesList = React.createClass({
                         <tr>
                             <th onClick={_.partial(this.sortFiles, 'title')}> Name </th>
                             <th onClick={_.partial(this.sortFiles, 'modifiedDate')}> Last Modified </th>
+                            <th> Modified By </th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>
